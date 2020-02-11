@@ -162,6 +162,24 @@ function createCompiler({
       });
   }
 
+  compiler.plugin('after-compile', (compilation, callback) => {
+    // Order compilation warnings by most recently modified
+    compilation.warnings = [
+      ...compilation.warnings,
+    ].sort((warning1, warning2) => {
+      const warning1Time = compilation.fileTimestamps[
+        warning1.module.resource
+      ] || fs.statSync(warning1.module.resource).mtime.getTime();
+      const warning2Time = compilation.fileTimestamps[
+        warning2.module.resource
+      ] || fs.statSync(warning2.module.resource).mtime.getTime();
+
+      return warning1Time < warning2Time ? 1 : -1;
+    });
+
+    callback();
+  });
+
   // "done" event fires when Webpack has finished recompiling the bundle.
   // Whether or not you have warnings or errors, you will get this event.
   compiler.hooks.done.tap('done', async stats => {
