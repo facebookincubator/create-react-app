@@ -12,13 +12,13 @@
 // and we try not to use "ERROR" level at all.
 
 module.exports = {
-  plugins: ['jest', 'testing-library'],
   overrides: [
     {
       files: ['**/__tests__/**/*', '**/*.{spec,test}.*'],
       env: {
         'jest/globals': true,
       },
+      plugins: ['jest', 'testing-library'],
       // A subset of the recommended rules:
       rules: {
         // https://github.com/jest-community/eslint-plugin-jest
