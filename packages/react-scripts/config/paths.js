@@ -30,6 +30,12 @@ const publicUrlOrPath = getPublicUrlOrPath(
 );
 
 const buildPath = process.env.BUILD_PATH || 'build';
+// In an environment where a different tsconfig is needed for the editor 
+// than the build or watch process, like in a monorepo you can use a different
+// tsconfig file by setting the TSCONFIG_BUILD environment variable for the 
+// build and TSCONFIG_WATCH for a custom watch tsconfig.
+const tsConfigFile = process.env.TSCONFIG_BUILD || 'tsconfig.json';
+const tsConfigWatchFile = process.env.TSCONFIG_WATCH || 'tsconfig.json';
 
 const moduleFileExtensions = [
   'web.mjs',
@@ -68,7 +74,8 @@ module.exports = {
   appIndexJs: resolveModule(resolveApp, 'src/index'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
-  appTsConfig: resolveApp('tsconfig.json'),
+  appTsConfig: resolveApp(tsConfigFile),
+  appTsConfigWatch: resolveApp(tsConfigWatchFile),
   appJsConfig: resolveApp('jsconfig.json'),
   yarnLockFile: resolveApp('yarn.lock'),
   testsSetup: resolveModule(resolveApp, 'src/setupTests'),
@@ -91,7 +98,8 @@ module.exports = {
   appIndexJs: resolveModule(resolveApp, 'src/index'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
-  appTsConfig: resolveApp('tsconfig.json'),
+  appTsConfig: resolveApp(tsConfigFile),
+  appTsConfigWatch: resolveApp(tsConfigWatchFile),
   appJsConfig: resolveApp('jsconfig.json'),
   yarnLockFile: resolveApp('yarn.lock'),
   testsSetup: resolveModule(resolveApp, 'src/setupTests'),
@@ -127,7 +135,8 @@ if (
     appIndexJs: resolveModule(resolveOwn, `${templatePath}/src/index`),
     appPackageJson: resolveOwn('package.json'),
     appSrc: resolveOwn(`${templatePath}/src`),
-    appTsConfig: resolveOwn(`${templatePath}/tsconfig.json`),
+    appTsConfig: resolveOwn(`${templatePath}/${tsConfigFile}`),
+    appTsConfigWatch: resolveOwn(`${templatePath}/${tsConfigWatchFile}`),
     appJsConfig: resolveOwn(`${templatePath}/jsconfig.json`),
     yarnLockFile: resolveOwn(`${templatePath}/yarn.lock`),
     testsSetup: resolveModule(resolveOwn, `${templatePath}/src/setupTests`),
