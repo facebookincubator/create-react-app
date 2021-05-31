@@ -746,7 +746,7 @@ module.exports = function (webpackEnv) {
           resolveTypeReferenceDirectiveModule: process.versions.pnp
             ? `${__dirname}/pnpTs.js`
             : undefined,
-          tsconfig: isEnvDevelopment ? paths.appTsConfigWatch : paths.appTsConfig,
+          tsconfig: isEnvDevelopment ? paths.appTsConfigDev : paths.appTsConfig,
           reportFiles: [
             // This one is specifically to match during CI tests,
             // as micromatch doesn't match
