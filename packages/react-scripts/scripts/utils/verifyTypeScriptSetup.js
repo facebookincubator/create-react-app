@@ -219,7 +219,7 @@ function verifyTypeScriptSetup() {
     firstTimeSetup = true;
   }
 
-  if (parsedCompilerOptions['emitDeclarationOnly'] != null) {
+  if (parsedCompilerOptions['emitDeclarationOnly']) {
     compilerOptions['emitDeclarationOnly'] = { value: true };
   } else {
     compilerOptions['noEmit'] = { value: true };
