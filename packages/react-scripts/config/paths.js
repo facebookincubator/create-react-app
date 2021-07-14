@@ -30,6 +30,13 @@ const publicUrlOrPath = getPublicUrlOrPath(
 );
 
 const buildPath = process.env.BUILD_PATH || 'build';
+// In an environment where a different tsconfig is needed for the editor 
+// than the config used for 'build' or 'start', like in a monorepo,
+// you can use a different tsconfig file 
+// by setting the TSCONFIG_PROD environment variable for the 'build' tsconfig
+// and TSCONFIG_DEV for a custom 'start' (watch) tsconfig.
+const tsConfigFile = process.env.TSCONFIG_PROD || 'tsconfig.json';
+const tsConfigDevFile = process.env.TSCONFIG_DEV || 'tsconfig.json';
 
 const moduleFileExtensions = [
   'web.mjs',
@@ -68,7 +75,8 @@ module.exports = {
   appIndexJs: resolveModule(resolveApp, 'src/index'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
-  appTsConfig: resolveApp('tsconfig.json'),
+  appTsConfig: resolveApp(tsConfigFile),
+  appTsConfigDev: resolveApp(tsConfigDevFile),
   appJsConfig: resolveApp('jsconfig.json'),
   yarnLockFile: resolveApp('yarn.lock'),
   testsSetup: resolveModule(resolveApp, 'src/setupTests'),
@@ -91,7 +99,8 @@ module.exports = {
   appIndexJs: resolveModule(resolveApp, 'src/index'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
-  appTsConfig: resolveApp('tsconfig.json'),
+  appTsConfig: resolveApp(tsConfigFile),
+  appTsConfigDev: resolveApp(tsConfigDevFile),
   appJsConfig: resolveApp('jsconfig.json'),
   yarnLockFile: resolveApp('yarn.lock'),
   testsSetup: resolveModule(resolveApp, 'src/setupTests'),
@@ -127,7 +136,8 @@ if (
     appIndexJs: resolveModule(resolveOwn, `${templatePath}/src/index`),
     appPackageJson: resolveOwn('package.json'),
     appSrc: resolveOwn(`${templatePath}/src`),
-    appTsConfig: resolveOwn(`${templatePath}/tsconfig.json`),
+    appTsConfig: resolveOwn(`${templatePath}/${tsConfigFile}`),
+    appTsConfigDev: resolveOwn(`${templatePath}/${tsConfigDevFile}`),
     appJsConfig: resolveOwn(`${templatePath}/jsconfig.json`),
     yarnLockFile: resolveOwn(`${templatePath}/yarn.lock`),
     testsSetup: resolveModule(resolveOwn, `${templatePath}/src/setupTests`),
