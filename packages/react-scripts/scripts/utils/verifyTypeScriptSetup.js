@@ -218,7 +218,7 @@ function verifyTypeScriptSetup() {
   if (appTsConfig.compilerOptions == null) {
     appTsConfig.compilerOptions = {};
     firstTimeSetup = true;
-  } 
+  }
 
   for (const option of Object.keys(compilerOptions)) {
     const { parsedValue, value, suggested, reason } = compilerOptions[option];
@@ -246,6 +246,27 @@ function verifyTypeScriptSetup() {
           valueToCheck == null ? 'must not' : 'must'
         )} be ${valueToCheck == null ? 'set' : chalk.cyan.bold(value)}` +
           (reason != null ? ` (${reason})` : '')
+      );
+    }
+  }
+
+  if (parsedCompilerOptions.jsxImportSource != null) {
+    if (hasJsxRuntime && semver.gte(ts.version, '4.1.0-beta')) {
+      if (process.env.JSX_IMPORT_SOURCE == null) {
+        process.env.JSX_IMPORT_SOURCE = parsedCompilerOptions.jsxImportSource;
+      }
+    } else {
+      appTsConfig = immer(appTsConfig, config => {
+        delete config.compilerOptions.jsxImportSource;
+      });
+      messages.push(
+        `${chalk.cyan(
+          'compilerOptions.jsxImportSource'
+        )} removed (requires ${chalk.bold(
+          'babel react runtime'
+        )} to be ${chalk.cyan.bold('automatic')} and ${chalk.bold(
+          'typescript'
+        )} version ${chalk.cyan.bold('>=4.1.0-beta')})`
       );
     }
   }
